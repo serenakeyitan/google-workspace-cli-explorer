@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive command explorer and quickstart guide for Google's Workspace CLI. Browse commands by service, see examples, copy snippets.">
+    <title>Google Workspace CLI Explorer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">⚡</span>
+                    Google Workspace CLI Explorer
+                </h1>
+                <div class="header-controls">
+                    <div class="search-container">
+                        <input
+                            type="text"
+                            id="searchInput"
+                            class="search-input"
+                            placeholder="Search commands... (press /)"
+                            aria-label="Search commands"
+                        >
+                        <span class="search-hint">Press <kbd>/</kbd> to search</span>
+                    </div>
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                        <span class="theme-icon light-icon">☀️</span>
+                        <span class="theme-icon dark-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2 class="hero-title">Command Line Access to Google Workspace</h2>
+                    <p class="hero-description">
+                        The <strong>Google Workspace CLI</strong> is a blazing-fast command-line interface
+                        written in <span class="rust-badge">Rust</span> and distributed via npm.
+                        Announced in March 2026, it brings powerful automation capabilities to Gmail, Drive,
+                        Calendar, Sheets, Docs, and more — right from your terminal.
+                    </p>
+                    <div class="hero-features">
+                        <div class="feature-pill">🦀 Built with Rust</div>
+                        <div class="feature-pill">📦 Distributed via npm</div>
+                        <div class="feature-pill">⚡ Lightning fast</div>
+                        <div class="feature-pill">🔒 Secure OAuth2</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quick-start">
+            <div class="container">
+                <h2 class="section-title">Quick Start</h2>
+                <div class="install-card">
+                    <p class="install-label">Install globally via npm:</p>
+                    <div class="code-block-wrapper">
+                        <pre class="code-block"><code class="language-bash"><span class="token-command">npm</span> i -g @googleworkspace/cli</code></pre>
+                        <button class="copy-btn" data-copy="npm i -g @googleworkspace/cli">
+                            <span class="copy-icon">📋</span>
+                            <span class="copy-text">Copy</span>
+                        </button>
+                    </div>
+                    <p class="install-note">After installation, authenticate with: <code class="inline-code">gws auth login</code></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="services">
+            <div class="container">
+                <h2 class="section-title">Explore Commands by Service</h2>
+                <div id="servicesGrid" class="services-grid">
+                    <!-- Services will be rendered by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <section class="integration-patterns">
+            <div class="container">
+                <h2 class="section-title">Integration Patterns</h2>
+                <div class="patterns-grid">
+                    <div class="pattern-card">
+                        <h3 class="pattern-title">
+                            <span class="pattern-icon">🔗</span>
+                            Piping with Other Tools
+                        </h3>
+                        <div class="code-block-wrapper">
+                            <pre class="code-block"><code class="language-bash"><span class="token-comment"># Export Drive files to process with jq</span>
+<span class="token-command">gws</span> drive list --format json | jq <span class="token-string">'.files[] | select(.size > 1000000)'</span>
+
+<span class="token-comment"># Email yourself system metrics</span>
+<span class="token-command">df</span> -h | <span class="token-command">gws</span> gmail send --to me --subject <span class="token-string">"Disk Usage"</span> --body-stdin
+
+<span class="token-comment"># Backup calendar to file</span>
+<span class="token-command">gws</span> calendar list --days 30 > backup.json</code></pre>
+                            <button class="copy-btn" data-copy="gws drive list --format json | jq '.files[] | select(.size > 1000000)'">
+                                <span class="copy-icon">📋</span>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h3 class="pattern-title">
+                            <span class="pattern-icon">🤖</span>
+                            OpenClaw/Claude Code Skills
+                        </h3>
+                        <div class="code-block-wrapper">
+                            <pre class="code-block"><code class="language-bash"><span class="token-comment"># Create a skill that emails reports</span>
+<span class="token-comment"># In your Claude Code skill:</span>
+
+<span class="token-command">gws</span> sheets read <span class="token-string">"Sales Report"</span> A1:Z100 > report.csv
+<span class="token-command">gws</span> gmail send \
+  --to team@company.com \
+  --subject <span class="token-string">"Weekly Sales"</span> \
+  --body <span class="token-string">"See attached"</span> \
+  --attach report.csv</code></pre>
+                            <button class="copy-btn" data-copy='gws sheets read "Sales Report" A1:Z100 > report.csv'>
+                                <span class="copy-icon">📋</span>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h3 class="pattern-title">
+                            <span class="pattern-icon">⚙️</span>
+                            Automation Scripts
+                        </h3>
+                        <div class="code-block-wrapper">
+                            <pre class="code-block"><code class="language-bash"><span class="token-comment">#!/bin/bash</span>
+<span class="token-comment"># daily-backup.sh - Backup important docs</span>
+
+<span class="token-keyword">DATE</span>=<span class="token-command">$(</span>date +%Y-%m-%d<span class="token-command">)</span>
+<span class="token-command">gws</span> drive download --folder <span class="token-string">"Important Docs"</span> --dest ./backups/$DATE/
+<span class="token-command">tar</span> -czf backups-$DATE.tar.gz ./backups/$DATE/
+<span class="token-command">gws</span> drive upload backups-$DATE.tar.gz --parent <span class="token-string">"Backups"</span></code></pre>
+                            <button class="copy-btn" data-copy="# See full script above">
+                                <span class="copy-icon">📋</span>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h3 class="pattern-title">
+                            <span class="pattern-icon">🚀</span>
+                            CI/CD Integration
+                        </h3>
+                        <div class="code-block-wrapper">
+                            <pre class="code-block"><code class="language-yaml"><span class="token-comment"># .github/workflows/report.yml</span>
+<span class="token-key">name:</span> Daily Report
+<span class="token-key">on:</span>
+  <span class="token-key">schedule:</span>
+    - <span class="token-key">cron:</span> <span class="token-string">'0 9 * * *'</span>
+
+<span class="token-key">jobs:</span>
+  <span class="token-key">report:</span>
+    <span class="token-key">runs-on:</span> ubuntu-latest
+    <span class="token-key">steps:</span>
+      - <span class="token-key">run:</span> npm i -g @googleworkspace/cli
+      - <span class="token-key">run:</span> gws gmail send --to team@co.com --subject Report</code></pre>
+                            <button class="copy-btn" data-copy="# See YAML above">
+                                <span class="copy-icon">📋</span>
+                                <span class="copy-text">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">
+                    Built with ❤️ for the Google Workspace CLI community
+                </p>
+                <div class="footer-links">
+                    <a href="https://developers.google.com/workspace/cli" class="footer-link" target="_blank" rel="noopener">Official Docs</a>
+                    <a href="https://twitter.com/rauchg" class="footer-link" target="_blank" rel="noopener">@rauchg's Tweet</a>
+                    <a href="https://github.com/serenakeyitan/google-workspace-cli-explorer" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
