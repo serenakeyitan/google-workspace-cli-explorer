@@ -1,6 +1,6 @@
 # Google Workspace CLI Explorer
 
-### TRY [Kael.im](https://kael.im/home)(NotebookLM slides alternative) and register at this link for 100 pages free daily quota (nbp)!
+### TRY [Kael.im](https://kael.im/home) to turn your Google Docs and PDFs into presentation slides instantly, 100 pages free daily!
 
 [![No Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)](package.json)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
